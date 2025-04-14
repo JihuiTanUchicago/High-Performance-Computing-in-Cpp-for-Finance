@@ -1,0 +1,12 @@
+[tanjihui@midway3-login3 jarrow_rudd_binomial_tree_european_call_pricer]$ g++ -O3 -march=native -ffast-math -funroll-loops -flto -fopenmp -std=c++17 jarrow_rudd_binomial_tree_european_pricer.cpp -o jarrow_rudd_binomial_tree_european_pricer
+[tanjihui@midway3-0070 jarrow_rudd_binomial_tree_european_call_pricer]$ ./jarrow_rudd_binomial_tree_european_pricer 
+S0        C0             P0             
+----------------------------------------
+90        7.97746        15.0234        
+95        10.4577        12.5036        
+100       13.2836        10.3294        
+105       16.4332        8.47905        
+110       19.8734        6.9192         
+Begin pricing 1 million calls on random input
+Random Inputs Generated
+Using 48 cores to priceElapsed time: 214 ms
