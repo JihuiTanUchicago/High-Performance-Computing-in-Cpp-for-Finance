@@ -15,14 +15,12 @@ inline float random_data(float low, float hi) {
     return low + r * (hi - low);
 }
 
-float price(float S, float K, float r, float v, float dt, int N, bool price_call_mode) {
+inline float price(float S, float K, float r, float v, float dt, int N, bool price_call_mode) {
     const float sqrt_dt = sqrtf(dt);
-    const float drift = (r - 0.5f * v * v) * dt;
-    const float u = expf(drift + v * sqrt_dt);
-    const float d = expf(drift - v * sqrt_dt);
-    const float u_div_d = u / d;
+    const float v_sqrt_dt = v * sqrt_dt;
+    float pow_ud = expf(((r - 0.5f * v * v) * dt - v_sqrt_dt) * N);
+    const float u_div_d = expf(2.0f * v_sqrt_dt);
     const float disc = expf(-r * dt);
-    float pow_ud = powf(d, N);
 
     vector<float> vec;
     vec.resize(N+1);
@@ -43,7 +41,7 @@ float price(float S, float K, float r, float v, float dt, int N, bool price_call
 
     for (int i = N - 1; i >= 0; --i) {
         for (int j = 0; j <= i; ++j) {
-            vec[j] = disc * (0.5f * vec[j + 1] + 0.5f * vec[j]);
+            vec[j] = disc * (0.5f * (vec[j] + vec[j+1]));
         }
     }
 
@@ -56,14 +54,14 @@ int main() {
     */
     const float K = 100.0f, r = 0.03f, v = 0.3f, dt = 0.001f;
     const int N = 1000;
-    const vector<float> S_values = {90.0f, 95.0f, 100.0f, 105.0f, 110.0f};
+    const vector<float> S_list = {90.0f, 95.0f, 100.0f, 105.0f, 110.0f};
 
     cout << left << setw(10) << "S0"
          << setw(15) << "C0"
          << setw(15) << "P0" << endl;
     cout << string(40, '-') << endl;
 
-    for (float S : S_values) {
+    for (float S : S_list) {
         float call = price(S, K, r, v, dt, N, true);
         float put = price(S, K, r, v, dt, N, false);
         cout << left << setw(10) << S
@@ -87,7 +85,7 @@ int main() {
     
     const int num_threads = 48;
     omp_set_num_threads(num_threads);
-    cout << "Using " << num_threads << " cores to price";
+    cout << "Using " << num_threads << " cores to price" << endl;
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
     #pragma omp parallel for schedule(guided, 128) proc_bind(close)
