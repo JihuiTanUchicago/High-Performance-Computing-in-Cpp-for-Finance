@@ -1,10 +1,15 @@
 ### Compilation
 ```
+module load cuda/11.7
 nvcc -O3 -std=c++17 cuda_european_call_pricer.cu -o cuda_european_call_pricer
 ```
 Then run:
 ```
 ./cuda_european_call_pricer
+```
+or alternatively:
+```
+nvprof ./cuda_european_call_pricer
 ```
 
 ### Output
