@@ -1,13 +1,19 @@
 ### Compilation
 ```
+module load cuda/11.7
 nvcc -O3 -std=c++17 cuda_european_call_pricer.cu -o cuda_european_call_pricer
 ```
 Then run:
 ```
 ./cuda_european_call_pricer
 ```
+or alternatively:
+```
+nvprof ./cuda_european_call_pricer
+```
 
 ### Output
+```
 ==4137456== NVPROF is profiling process 4137456, command: ./cuda_european_call_pricer
 S0        K       r       v       T       callPrice      callDelta      callRho        callTheta      putPrice       putDelta       putRho         putTheta       gamma          vega
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -38,3 +44,4 @@ Pricing for 1 million records complete!
                     0.00%     300ns         1     300ns     300ns     300ns  cuDeviceTotalMem
                     0.00%     240ns         1     240ns     240ns     240ns  cuModuleGetLoadingMode
                     0.00%     201ns         1     201ns     201ns     201ns  cuDeviceGetUuid
+```
