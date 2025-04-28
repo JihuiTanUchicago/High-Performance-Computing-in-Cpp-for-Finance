@@ -1,4 +1,3 @@
-// portfolio_simulation.cu
 #include <iostream>
 #include <vector>
 #include <cmath>
